@@ -1,21 +1,24 @@
 #include <SoftwareSerial.h>
+
+// Bluetooth module (HC-05)
 SoftwareSerial bluetooth(3, 2); // RX, TX
 
-// Motor one (left)
+// Motor A (Left Motor)
 #define ENA 6
 #define IN1 12
 #define IN2 11
 
-// Motor two (right)
+// Motor B (Right Motor)
+#define ENB 5
 #define IN3 10
 #define IN4 9
-#define ENB 5
 
-#define Speed 255
-#define turnSpeed 150
-#define halfSpeed 100
+// Speed settings
+#define MAX_SPEED 255
+#define TURN_SPEED 150
+#define HALF_SPEED 100
 
-char t;
+char command;
 
 void setup() {
   Serial.begin(9600);
@@ -24,69 +27,68 @@ void setup() {
   pinMode(ENA, OUTPUT);
   pinMode(IN1, OUTPUT);
   pinMode(IN2, OUTPUT);
+
   pinMode(ENB, OUTPUT);
   pinMode(IN3, OUTPUT);
   pinMode(IN4, OUTPUT);
 }
 
 void loop() {
-  if (bluetooth.available() > 0) {
-    t = bluetooth.read();
-    Serial.println(t);
+  if (bluetooth.available()) {
+    command = bluetooth.read();
+    Serial.println(command);
   }
 
-  switch (t) {
-    case 'F': forward(); break;
-    case 'B': backward(); break;
-    case 'L': turnleft(); break;
-    case 'R': turnright(); break;
-    case 'S': Stop(); break;
+  switch (command) {
+    case 'F': moveForward(); break;
+    case 'B': moveBackward(); break;
+    case 'L': turnLeft(); break;
+    case 'R': turnRight(); break;
     case 'G': forwardLeft(); break;
     case 'I': forwardRight(); break;
+    case 'S': stopMotors(); break;
   }
 }
 
-void forward() {
-  analogWrite(ENA, Speed);
-  analogWrite(ENB, Speed);
+void moveForward() {
+  analogWrite(ENA, MAX_SPEED);
+  analogWrite(ENB, MAX_SPEED);
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, HIGH);
   digitalWrite(IN3, HIGH);
   digitalWrite(IN4, LOW);
 }
 
-void backward() {
-  analogWrite(ENA, Speed);
-  analogWrite(ENB, Speed);
+void moveBackward() {
+  analogWrite(ENA, MAX_SPEED);
+  analogWrite(ENB, MAX_SPEED);
   digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, HIGH);
 }
 
-void turnright() {
-  analogWrite(ENA, turnSpeed);
-  analogWrite(ENB, turnSpeed);
-  digitalWrite(IN1, HIGH);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, HIGH);
-  digitalWrite(IN4, LOW);
-  delay(150);
-}
-
-void turnleft() {
-  analogWrite(ENA, turnSpeed);
-  analogWrite(ENB, turnSpeed);
+void turnLeft() {
+  analogWrite(ENA, TURN_SPEED);
+  analogWrite(ENB, TURN_SPEED);
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, HIGH);
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, HIGH);
-  delay(150);
+}
+
+void turnRight() {
+  analogWrite(ENA, TURN_SPEED);
+  analogWrite(ENB, TURN_SPEED);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
 }
 
 void forwardLeft() {
-  analogWrite(ENA, halfSpeed);
-  analogWrite(ENB, Speed);
+  analogWrite(ENA, HALF_SPEED);
+  analogWrite(ENB, MAX_SPEED);
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, HIGH);
   digitalWrite(IN3, HIGH);
@@ -94,15 +96,15 @@ void forwardLeft() {
 }
 
 void forwardRight() {
-  analogWrite(ENA, Speed);
-  analogWrite(ENB, halfSpeed);
+  analogWrite(ENA, MAX_SPEED);
+  analogWrite(ENB, HALF_SPEED);
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, HIGH);
   digitalWrite(IN3, HIGH);
   digitalWrite(IN4, LOW);
 }
 
-void Stop() {
+void stopMotors() {
   analogWrite(ENA, 0);
   analogWrite(ENB, 0);
   digitalWrite(IN1, LOW);
