@@ -32,7 +32,8 @@ The system demonstrates the integration of **wireless communication**, **motor c
 - DC Motors & Robot Car Chassis  
 - Lithium Battery & Battery Holder  
 - Jumper Wires  
-- Mobile Bluetooth Controller Application  
+- Mobile Bluetooth Controller Application
+- Breadboard
 
 ---
 
