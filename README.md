@@ -30,7 +30,8 @@ The system demonstrates the integration of **wireless communication**, **motor c
 - L298N Motor Driver  
 - MT3608 DC-DC Step-Up Converter  
 - DC Motors & Robot Car Chassis  
-- Lithium Battery & Battery Holder  
+- Lithium Battery
+- Battery Holder
 - Jumper Wires  
 - Mobile Bluetooth Controller Application
 - Breadboard
